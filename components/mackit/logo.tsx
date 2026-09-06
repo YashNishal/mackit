@@ -7,7 +7,7 @@ export function MacKitLogo({ compact = false }: { compact?: boolean }) {
       className="inline-flex items-center gap-2.5 rounded-lg text-foreground"
       aria-label="MacKit home"
     >
-      <span className="flex size-8 items-center justify-center rounded-[10px] bg-primary text-primary-foreground shadow-xs">
+      <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-xs">
         <svg
           viewBox="0 0 24 24"
           className="size-4"

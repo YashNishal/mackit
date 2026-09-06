@@ -54,7 +54,7 @@ export function SearchBox({
           aria-controls={listId}
           aria-expanded={open && hits.length > 0}
           role="combobox"
-          className="h-14 rounded-2xl border-border/80 bg-card/90 pr-16 pl-12 text-base shadow-lg md:text-base"
+          className="h-14 rounded-xl border-border/80 bg-card/90 pr-16 pl-12 text-base shadow-lg md:text-base"
           onChange={(event) => {
             setQuery(event.target.value);
             setActive(0);
@@ -85,7 +85,7 @@ export function SearchBox({
         <ul
           id={listId}
           role="listbox"
-          className="absolute z-30 mt-2 max-h-80 w-full overflow-auto rounded-2xl border bg-popover p-1.5 shadow-lg"
+          className="absolute z-30 mt-2 max-h-80 w-full overflow-auto rounded-xl border bg-popover p-1.5 shadow-lg"
         >
           {hits.length === 0 ? (
             <li className="px-3 py-6 text-center text-sm text-muted-foreground">

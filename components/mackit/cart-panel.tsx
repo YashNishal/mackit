@@ -29,9 +29,17 @@ function CartList({
 }) {
   if (apps.length === 0 && tools.length === 0) {
     return (
-      <p className="px-1 py-8 text-sm text-muted-foreground">
-        Add apps from search or the categories below.
-      </p>
+      <div className="flex flex-col items-center gap-3 px-2 py-10 text-center">
+        <span className="flex size-11 items-center justify-center rounded-lg border bg-muted/50 text-muted-foreground">
+          <ShoppingBag className="size-5" />
+        </span>
+        <div className="space-y-1">
+          <p className="text-sm font-medium">Your cart is empty</p>
+          <p className="max-w-44 text-xs leading-5 text-muted-foreground">
+            Add apps from search or the categories below.
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -65,7 +73,7 @@ function CartGroup({
         {packages.map((pkg) => (
           <li
             key={pkg.id}
-            className="flex items-center gap-2 rounded-xl px-1 py-1"
+            className="flex items-center gap-2 rounded-lg px-1 py-1"
           >
             <PackageIcon pkg={pkg} size="sm" />
             <span className="min-w-0 flex-1">
@@ -160,7 +168,7 @@ export function MobileCartBar({
         </Button>
       </div>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
+        <SheetContent side="bottom" className="h-[85vh] rounded-t-2xl">
           <SheetHeader>
             <SheetTitle>Your cart</SheetTitle>
             <SheetDescription>

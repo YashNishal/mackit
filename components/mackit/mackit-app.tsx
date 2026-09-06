@@ -161,8 +161,14 @@ export function MacKitApp({
       <main className="mx-auto flex w-full max-w-6xl flex-1 gap-8 px-4 pt-10 pb-28 sm:px-6 lg:pb-16">
         <div className="min-w-0 flex-1 space-y-12">
           <section className="max-w-3xl space-y-5">
-            <p className="text-sm font-medium text-primary">For macOS</p>
-            <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+            <p className="inline-flex items-center gap-2 rounded-lg border bg-card/80 px-3 py-1 font-mono text-[11px] tracking-wide text-muted-foreground">
+              <span
+                aria-hidden="true"
+                className="size-1.5 rounded-full bg-primary"
+              />
+              For macOS · Homebrew catalog
+            </p>
+            <h1 className="font-display text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
               Set up your Mac in one go.
             </h1>
             <p className="max-w-xl text-base leading-7 text-muted-foreground">
@@ -170,18 +176,22 @@ export function MacKitApp({
               command. No account. Nothing leaves this browser until you paste
               that command in Terminal.
             </p>
+            <p className="font-mono text-[11px] tracking-wide text-muted-foreground">
+              Local-only cart · Share links stay in the URL · Script checksum
+              shown before you run it
+            </p>
             {catalogError ? (
-              <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 {catalogError}
               </p>
             ) : null}
             {unavailable.length > 0 ? (
-              <p className="rounded-xl border bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
+              <p className="rounded-lg border bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
                 Some shared packages are no longer in Homebrew: {unavailable.join(", ")}.
               </p>
             ) : null}
             {packages.length === 0 && !catalogError ? (
-              <Skeleton className="h-14 w-full rounded-2xl" />
+              <Skeleton className="h-14 w-full rounded-xl" />
             ) : (
               <SearchBox
                 packages={packages}
@@ -203,7 +213,7 @@ export function MacKitApp({
         </div>
 
         <aside className="hidden w-80 shrink-0 lg:block">
-          <div className="sticky top-20 rounded-3xl border bg-card/90 p-4 shadow-lg">
+          <div className="sticky top-20 rounded-2xl border bg-card/90 p-4 shadow-lg">
             <CartContents
               items={items}
               onRemove={toggle}

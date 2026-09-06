@@ -14,11 +14,11 @@ export function CategorySection({
   onToggle: (pkg: CatalogPackage) => void;
 }) {
   return (
-    <section aria-labelledby={`category-${category.id}`} className="space-y-3">
+    <section aria-labelledby={`category-${category.id}`} className="space-y-3 border-t border-border/70 pt-8">
       <div className="max-w-xl">
         <h2
           id={`category-${category.id}`}
-          className="text-lg font-semibold tracking-tight"
+          className="font-display text-lg font-semibold tracking-tight"
         >
           {category.label}
         </h2>
