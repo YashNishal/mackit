@@ -7,11 +7,11 @@ import type { CatalogPackage } from "@/lib/catalog/types";
 export function CategorySection({
   category,
   selectedIds,
-  onToggle,
+  onDetails,
 }: {
   category: ResolvedCategory;
   selectedIds: Set<string>;
-  onToggle: (pkg: CatalogPackage) => void;
+  onDetails: (pkg: CatalogPackage) => void;
 }) {
   return (
     <section aria-labelledby={`category-${category.id}`} className="space-y-3 border-t border-border/70 pt-8">
@@ -30,7 +30,7 @@ export function CategorySection({
             key={pkg.id}
             pkg={pkg}
             selected={selectedIds.has(pkg.id)}
-            onToggle={onToggle}
+            onDetails={onDetails}
           />
         ))}
       </div>

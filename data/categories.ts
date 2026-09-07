@@ -288,6 +288,12 @@ export function curatedIds(): PackageId[] {
     }
   }
 
+  for (const bundle of BUNDLES) {
+    for (const app of bundle.apps) {
+      ids.add(packageId(app.kind, app.token));
+    }
+  }
+
   return [...ids];
 }
 
@@ -297,6 +303,89 @@ export interface ResolvedCategory {
   description: string;
   packages: CatalogPackage[];
 }
+
+export interface BundleDefinition {
+  id: string;
+  label: string;
+  description: string;
+  apps: CuratedApp[];
+}
+
+export const BUNDLES: BundleDefinition[] = [
+  {
+    id: "web-dev",
+    label: "Web Developer",
+    description: "Editor, terminal, containers, and Git tooling.",
+    apps: [
+      { kind: "cask", token: "visual-studio-code" },
+      { kind: "cask", token: "ghostty" },
+      { kind: "cask", token: "docker-desktop" },
+      { kind: "cask", token: "postman" },
+      { kind: "cask", token: "tableplus" },
+      { kind: "formula", token: "git" },
+      { kind: "formula", token: "gh" },
+      { kind: "formula", token: "node" },
+      { kind: "formula", token: "fzf" },
+    ],
+  },
+  {
+    id: "everyday",
+    label: "Everyday Essentials",
+    description: "Browser, chat, notes, and handy Mac utilities.",
+    apps: [
+      { kind: "cask", token: "google-chrome" },
+      { kind: "cask", token: "slack" },
+      { kind: "cask", token: "notion" },
+      { kind: "cask", token: "spotify" },
+      { kind: "cask", token: "raycast" },
+      { kind: "cask", token: "the-unarchiver" },
+      { kind: "cask", token: "shottr" },
+      { kind: "cask", token: "1password" },
+    ],
+  },
+  {
+    id: "design",
+    label: "Designer",
+    description: "Design tools plus a browser and image optimizer.",
+    apps: [
+      { kind: "cask", token: "figma" },
+      { kind: "cask", token: "imageoptim" },
+      { kind: "cask", token: "inkscape" },
+      { kind: "cask", token: "gimp" },
+      { kind: "cask", token: "google-chrome" },
+      { kind: "cask", token: "notion" },
+    ],
+  },
+  {
+    id: "student",
+    label: "Student",
+    description: "Study, reading, calls, and window management.",
+    apps: [
+      { kind: "cask", token: "google-chrome" },
+      { kind: "cask", token: "notion" },
+      { kind: "cask", token: "obsidian" },
+      { kind: "cask", token: "zoom" },
+      { kind: "cask", token: "skim" },
+      { kind: "cask", token: "calibre" },
+      { kind: "cask", token: "anki" },
+      { kind: "cask", token: "rectangle" },
+    ],
+  },
+  {
+    id: "ai-starter",
+    label: "AI Starter",
+    description: "Chat apps plus local models and JSON tools.",
+    apps: [
+      { kind: "cask", token: "chatgpt" },
+      { kind: "cask", token: "claude" },
+      { kind: "cask", token: "ollama-app" },
+      { kind: "formula", token: "ollama" },
+      { kind: "formula", token: "jq" },
+    ],
+  },
+];
+
+export type ResolvedBundle = ResolvedCategory;
 
 export function resolveCategories(
   packagesById: Map<string, CatalogPackage>,
@@ -325,6 +414,35 @@ export function resolveCategories(
       packages,
     };
   }).filter((category) => category.packages.length > 0);
+}
+
+export function resolveBundles(
+  packagesById: Map<string, CatalogPackage>,
+): ResolvedBundle[] {
+  return BUNDLES.map((bundle) => {
+    const seen = new Set<string>();
+    const packages: CatalogPackage[] = [];
+
+    for (const app of bundle.apps) {
+      const id = packageId(app.kind, app.token);
+      if (seen.has(id)) {
+        continue;
+      }
+      seen.add(id);
+
+      const pkg = packagesById.get(id);
+      if (pkg) {
+        packages.push(pkg);
+      }
+    }
+
+    return {
+      id: bundle.id,
+      label: bundle.label,
+      description: bundle.description,
+      packages,
+    };
+  }).filter((bundle) => bundle.packages.length > 0);
 }
 
 export function applyExtraAliases(pkg: CatalogPackage): CatalogPackage {

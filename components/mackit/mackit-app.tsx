@@ -2,14 +2,16 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { BundleSection } from "@/components/mackit/bundle-section";
 import { CartContents, MobileCartBar } from "@/components/mackit/cart-panel";
 import { CategorySection } from "@/components/mackit/category-section";
 import { CheckoutDialog } from "@/components/mackit/checkout-dialog";
+import { PackageDetailsDialog } from "@/components/mackit/package-details-dialog";
 import { SearchBox } from "@/components/mackit/search-box";
 import { SiteFooter } from "@/components/mackit/site-footer";
 import { SiteHeader } from "@/components/mackit/site-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { ResolvedCategory } from "@/data/categories";
+import type { ResolvedBundle, ResolvedCategory } from "@/data/categories";
 import {
   CART_QUERY_PARAM,
   CART_STORAGE_KEY,
@@ -26,11 +28,13 @@ import type { InstallerMeta } from "@/lib/installer/command";
 
 export function MacKitApp({
   featured,
+  bundles,
   generatedAt,
   installer,
   runnerSource,
 }: {
   featured: ResolvedCategory[];
+  bundles: ResolvedBundle[];
   generatedAt: string;
   installer: InstallerMeta;
   runnerSource: string;
@@ -42,6 +46,7 @@ export function MacKitApp({
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [mobileCartOpen, setMobileCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [detailsPkg, setDetailsPkg] = useState<CatalogPackage | null>(null);
 
   const byId = useMemo(
     () => new Map(packages.map((pkg) => [pkg.id, pkg])),
@@ -121,6 +126,47 @@ export function MacKitApp({
     });
   }, []);
 
+  const showDetails = useCallback((pkg: CatalogPackage) => {
+    setDetailsPkg(pkg);
+  }, []);
+
+  const addBundle = useCallback((bundlesToAdd: CatalogPackage[]) => {
+    if (bundlesToAdd.length === 0) {
+      return;
+    }
+    setIds((current) => {
+      if (current.length >= MAX_CART_SIZE) {
+        toast.error(`The cart holds at most ${MAX_CART_SIZE} packages.`);
+        return current;
+      }
+      const next = new Set(current);
+      let added = 0;
+      for (const pkg of bundlesToAdd) {
+        if (next.size >= MAX_CART_SIZE) {
+          break;
+        }
+        if (!next.has(pkg.id)) {
+          next.add(pkg.id);
+          added += 1;
+        }
+      }
+      if (added === 0) {
+        return current;
+      }
+      const remaining = bundlesToAdd.length - added;
+      if (remaining > 0) {
+        toast.warning(
+          `Added ${added} apps. The cart holds at most ${MAX_CART_SIZE} packages.`,
+        );
+      } else {
+        toast.success(
+          added === 1 ? "Added 1 app." : `Added ${added} apps.`,
+        );
+      }
+      return uniqueSortedIds([...next]);
+    });
+  }, []);
+
   const share = useCallback(async () => {
     const path = cartSharePath(ids);
     const url = `${window.location.origin}${path}`;
@@ -196,7 +242,7 @@ export function MacKitApp({
               <SearchBox
                 packages={packages}
                 selectedIds={selectedIds}
-                onToggle={toggle}
+                onDetails={showDetails}
                 disabled={Boolean(catalogError)}
               />
             )}
@@ -207,9 +253,16 @@ export function MacKitApp({
               key={category.id}
               category={category}
               selectedIds={selectedIds}
-              onToggle={toggle}
+              onDetails={showDetails}
             />
           ))}
+
+          <BundleSection
+            bundles={bundles}
+            selectedIds={selectedIds}
+            onAddBundle={addBundle}
+            onDetails={showDetails}
+          />
         </div>
 
         <aside className="hidden w-80 shrink-0 lg:block">
@@ -248,6 +301,16 @@ export function MacKitApp({
         items={items}
         sha256={installer.sha256}
         runnerSource={runnerSource}
+      />
+      <PackageDetailsDialog
+        pkg={detailsPkg}
+        selected={detailsPkg ? selectedIds.has(detailsPkg.id) : false}
+        onToggle={toggle}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDetailsPkg(null);
+          }
+        }}
       />
       <SiteFooter generatedAt={generatedAt} />
     </div>

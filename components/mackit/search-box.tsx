@@ -3,6 +3,7 @@
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { PackageIcon } from "@/components/mackit/package-icon";
+import { PackageTooltip } from "@/components/mackit/package-tooltip";
 import { Input } from "@/components/ui/input";
 import { kindLabel } from "@/lib/catalog/ids";
 import { searchCatalog } from "@/lib/catalog/search";
@@ -11,12 +12,12 @@ import type { CatalogPackage } from "@/lib/catalog/types";
 export function SearchBox({
   packages,
   selectedIds,
-  onToggle,
+  onDetails,
   disabled,
 }: {
   packages: CatalogPackage[];
   selectedIds: Set<string>;
-  onToggle: (pkg: CatalogPackage) => void;
+  onDetails: (pkg: CatalogPackage) => void;
   disabled?: boolean;
 }) {
   const [query, setQuery] = useState("");
@@ -41,6 +42,11 @@ export function SearchBox({
     window.addEventListener("pointerdown", onPointerDown);
     return () => window.removeEventListener("pointerdown", onPointerDown);
   }, []);
+
+  function openDetails(pkg: CatalogPackage) {
+    setOpen(false);
+    onDetails(pkg);
+  }
 
   return (
     <div ref={rootRef} className="relative">
@@ -71,7 +77,7 @@ export function SearchBox({
               setActive((value) => Math.max(value - 1, 0));
             } else if (event.key === "Enter" && hits[activeIndex]) {
               event.preventDefault();
-              onToggle(hits[activeIndex].pkg);
+              openDetails(hits[activeIndex].pkg);
             } else if (event.key === "Escape") {
               setOpen(false);
             }
@@ -96,27 +102,31 @@ export function SearchBox({
               const selected = selectedIds.has(hit.pkg.id);
               return (
                 <li key={hit.pkg.id} role="option" aria-selected={index === activeIndex}>
-                  <button
-                    type="button"
-                    className={`flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left ${
-                      index === activeIndex ? "bg-muted" : "hover:bg-muted/70"
-                    }`}
-                    onMouseEnter={() => setActive(index)}
-                    onClick={() => onToggle(hit.pkg)}
-                  >
-                    <PackageIcon pkg={hit.pkg} size="sm" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium">
-                        {hit.pkg.name}
+                  <PackageTooltip pkg={hit.pkg}>
+                    <button
+                      type="button"
+                      aria-label={`${hit.pkg.name} — view details`}
+                      className={`flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left ${
+                        index === activeIndex ? "bg-muted" : "hover:bg-muted/70"
+                      }`}
+                      onMouseEnter={() => setActive(index)}
+                      onFocus={() => setActive(index)}
+                      onClick={() => openDetails(hit.pkg)}
+                    >
+                      <PackageIcon pkg={hit.pkg} size="sm" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium">
+                          {hit.pkg.name}
+                        </span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {hit.pkg.desc || hit.pkg.token}
+                        </span>
                       </span>
-                      <span className="block truncate text-xs text-muted-foreground">
-                        {hit.pkg.desc || hit.pkg.token}
+                      <span className="text-xs text-muted-foreground">
+                        {selected ? "Added" : kindLabel(hit.pkg.kind)}
                       </span>
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {selected ? "Added" : kindLabel(hit.pkg.kind)}
-                    </span>
-                  </button>
+                    </button>
+                  </PackageTooltip>
                 </li>
               );
             })
