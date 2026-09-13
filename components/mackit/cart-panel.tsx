@@ -172,7 +172,7 @@ export function MobileCartBar({
           <SheetHeader>
             <SheetTitle>Your cart</SheetTitle>
             <SheetDescription>
-              Review selected Homebrew apps before generating the install command.
+              Review your apps before installing.
             </SheetDescription>
           </SheetHeader>
           <div className="min-h-0 flex-1 overflow-hidden px-4 pb-4">{children}</div>

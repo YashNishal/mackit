@@ -40,7 +40,7 @@ export function BundleSection({
         </h2>
         <p className="text-sm text-muted-foreground">
           One click adds a curated setup. Click an app to add or remove it, or
-          open its info for the install command and homepage.
+          open its info for details and the vendor site.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s · MacKit",
   },
   description:
-    "Choose Homebrew apps, add them to a cart, and install everything with one guided Terminal command.",
+    "Choose apps for your Mac, add them to a cart, and install everything with one command.",
   applicationName: "MacKit",
   icons: {
     icon: "/favicon.svg",

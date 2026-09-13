@@ -58,7 +58,7 @@ export function SearchBox({
         <Input
           value={query}
           disabled={disabled}
-          placeholder="Search any Homebrew app or CLI tool"
+          placeholder="Search apps and tools"
           aria-autocomplete="list"
           aria-controls={listId}
           aria-expanded={open && hits.length > 0}
@@ -102,7 +102,7 @@ export function SearchBox({
         >
           {hits.length === 0 ? (
             <li className="px-3 py-6 text-center text-sm text-muted-foreground">
-              No Homebrew packages match “{query.trim()}”.
+              No apps match “{query.trim()}”.
             </li>
           ) : (
             hits.map((hit, index) => {

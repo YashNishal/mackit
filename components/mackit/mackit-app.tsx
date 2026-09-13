@@ -91,7 +91,7 @@ export function MacKitApp({
         setUnavailable(missing);
       } catch {
         if (!cancelled) {
-          setCatalogError("The Homebrew catalog could not be loaded. Check your connection and retry.");
+                setCatalogError("The app list could not be loaded. Check your connection and retry.");
         }
       } finally {
         if (!cancelled) {
@@ -212,19 +212,17 @@ export function MacKitApp({
                 aria-hidden="true"
                 className="size-1.5 rounded-full bg-primary"
               />
-              For macOS · Homebrew catalog
+              For Mac
             </p>
             <h1 className="font-display text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
               Set up your Mac in one go.
             </h1>
             <p className="max-w-xl text-base leading-7 text-muted-foreground">
-              Browse popular apps, search the Homebrew catalog, and copy one
-              command. No account. Nothing leaves this browser until you paste
-              that command in Terminal.
+              Browse popular apps or search for more. Add them to a cart, then
+              install everything with one Terminal command. No account.
             </p>
             <p className="font-mono text-[11px] tracking-wide text-muted-foreground">
-              Local-only cart · Share links stay in the URL · Script checksum
-              shown before you run it
+              Nothing is uploaded · Share your list with a link
             </p>
             {catalogError ? (
               <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -233,7 +231,7 @@ export function MacKitApp({
             ) : null}
             {unavailable.length > 0 ? (
               <p className="rounded-lg border bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
-                Some shared packages are no longer in Homebrew: {unavailable.join(", ")}.
+                Some shared apps are no longer available: {unavailable.join(", ")}.
               </p>
             ) : null}
             {packages.length === 0 && !catalogError ? (

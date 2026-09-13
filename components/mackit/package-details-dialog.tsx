@@ -60,7 +60,7 @@ export function PackageDetailsDialog({
                     {pkg.name}
                   </DialogTitle>
                   <DialogDescription className="mt-1 text-left">
-                    {pkg.desc || "No description provided by Homebrew."}
+                    {pkg.desc || "No description available."}
                   </DialogDescription>
                 </div>
               </div>

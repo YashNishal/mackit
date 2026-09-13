@@ -65,7 +65,7 @@ export function CheckoutDialog({
           <DialogTitle>Install on this Mac</DialogTitle>
           <DialogDescription>
             MacKit cannot install apps from the browser. Copy one command, paste
-            it in Terminal, and review Homebrew’s prompts.
+            it in Terminal, and confirm when asked.
           </DialogDescription>
         </DialogHeader>
 
@@ -94,9 +94,9 @@ export function CheckoutDialog({
           <li className="rounded-xl border bg-muted/40 p-3">
             <p className="font-medium">3. Paste, press Return, and confirm</p>
             <p className="mt-1 text-muted-foreground">
-              If Homebrew is missing, the script explains what it will install
-              and asks before continuing. It may request your Mac password.
-              Failed apps are skipped so the rest can still install.
+              If extra tools are needed first, the script explains and asks
+              before continuing. It may request your Mac password. Failed apps
+              are skipped so the rest can still install.
             </p>
           </li>
         </ol>
