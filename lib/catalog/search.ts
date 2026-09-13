@@ -120,12 +120,3 @@ export function searchCatalog(
 
   return hits.slice(0, limit);
 }
-
-export function popularPackages(
-  packages: CatalogPackage[],
-  limit = 12,
-): CatalogPackage[] {
-  return [...packages]
-    .sort((left, right) => right.popularity - left.popularity)
-    .slice(0, limit);
-}

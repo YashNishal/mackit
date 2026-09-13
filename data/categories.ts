@@ -387,62 +387,48 @@ export const BUNDLES: BundleDefinition[] = [
 
 export type ResolvedBundle = ResolvedCategory;
 
+function resolveGroups(
+  groups: { id: string; label: string; description: string; apps: CuratedApp[] }[],
+  packagesById: Map<string, CatalogPackage>,
+): ResolvedCategory[] {
+  return groups
+    .map((group) => {
+      const seen = new Set<string>();
+      const packages: CatalogPackage[] = [];
+
+      for (const app of group.apps) {
+        const id = packageId(app.kind, app.token);
+        if (seen.has(id)) {
+          continue;
+        }
+        seen.add(id);
+
+        const pkg = packagesById.get(id);
+        if (pkg) {
+          packages.push(pkg);
+        }
+      }
+
+      return {
+        id: group.id,
+        label: group.label,
+        description: group.description,
+        packages,
+      };
+    })
+    .filter((group) => group.packages.length > 0);
+}
+
 export function resolveCategories(
   packagesById: Map<string, CatalogPackage>,
 ): ResolvedCategory[] {
-  return CATEGORIES.map((category) => {
-    const seen = new Set<string>();
-    const packages: CatalogPackage[] = [];
-
-    for (const app of category.apps) {
-      const id = packageId(app.kind, app.token);
-      if (seen.has(id)) {
-        continue;
-      }
-      seen.add(id);
-
-      const pkg = packagesById.get(id);
-      if (pkg) {
-        packages.push(pkg);
-      }
-    }
-
-    return {
-      id: category.id,
-      label: category.label,
-      description: category.description,
-      packages,
-    };
-  }).filter((category) => category.packages.length > 0);
+  return resolveGroups(CATEGORIES, packagesById);
 }
 
 export function resolveBundles(
   packagesById: Map<string, CatalogPackage>,
 ): ResolvedBundle[] {
-  return BUNDLES.map((bundle) => {
-    const seen = new Set<string>();
-    const packages: CatalogPackage[] = [];
-
-    for (const app of bundle.apps) {
-      const id = packageId(app.kind, app.token);
-      if (seen.has(id)) {
-        continue;
-      }
-      seen.add(id);
-
-      const pkg = packagesById.get(id);
-      if (pkg) {
-        packages.push(pkg);
-      }
-    }
-
-    return {
-      id: bundle.id,
-      label: bundle.label,
-      description: bundle.description,
-      packages,
-    };
-  }).filter((bundle) => bundle.packages.length > 0);
+  return resolveGroups(BUNDLES, packagesById);
 }
 
 export function applyExtraAliases(pkg: CatalogPackage): CatalogPackage {

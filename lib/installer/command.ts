@@ -2,7 +2,6 @@ import type { PackageId } from "@/lib/catalog/types";
 import { encodeManifestBase64 } from "@/lib/installer/manifest";
 
 export const INSTALLER_PATH = "/install/v1/mackit-install.sh";
-export const INSTALLER_META_PATH = "/install/v1/mackit-install.meta.json";
 
 export interface InstallerMeta {
   version: string;

@@ -7,6 +7,7 @@ import { CartContents, MobileCartBar } from "@/components/mackit/cart-panel";
 import { CategorySection } from "@/components/mackit/category-section";
 import { CheckoutDialog } from "@/components/mackit/checkout-dialog";
 import { PackageDetailsDialog } from "@/components/mackit/package-details-dialog";
+import { ForMacEgg } from "@/components/for-mac-egg";
 import { SearchBox } from "@/components/mackit/search-box";
 import { SiteFooter } from "@/components/mackit/site-footer";
 import { SiteHeader } from "@/components/mackit/site-header";
@@ -202,18 +203,12 @@ export function MacKitApp({
   }, []);
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-6xl flex-1 gap-8 px-4 pt-10 pb-28 sm:px-6 lg:pb-16">
         <div className="min-w-0 flex-1 space-y-12">
           <section className="max-w-3xl space-y-5">
-            <p className="inline-flex items-center gap-2 rounded-lg border bg-card/80 px-3 py-1 font-mono text-[11px] tracking-wide text-muted-foreground">
-              <span
-                aria-hidden="true"
-                className="size-1.5 rounded-full bg-primary"
-              />
-              For Mac
-            </p>
+            <ForMacEgg />
             <h1 className="font-display text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
               Set up your Mac in one go.
             </h1>

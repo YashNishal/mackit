@@ -66,8 +66,3 @@ export function cartSharePath(ids: PackageId[]): string {
 
   return `/?${CART_QUERY_PARAM}=${encodeURIComponent(encoded)}`;
 }
-
-export function isUrlTooLong(origin: string, ids: PackageId[]): boolean {
-  const url = `${origin}${cartSharePath(ids)}`;
-  return url.length > 1800;
-}

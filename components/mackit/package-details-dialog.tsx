@@ -100,6 +100,7 @@ export function PackageDetailsDialog({
                 <Button
                   variant="outline"
                   size="lg"
+                  nativeButton={false}
                   render={
                     <a
                       href={pkg.homepage}

@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { MacKitApp } from "@/components/mackit/mackit-app";
+import { CatalogShell } from "@/components/shells/catalog-shell";
 import { resolveBundles, resolveCategories } from "@/data/categories";
 import { indexById } from "@/lib/catalog/compact";
 import {
@@ -23,7 +23,7 @@ export default async function HomePage() {
   );
 
   return (
-    <MacKitApp
+    <CatalogShell
       featured={featured}
       bundles={bundles}
       generatedAt={meta.generatedAt}

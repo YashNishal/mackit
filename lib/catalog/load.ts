@@ -8,12 +8,6 @@ import {
 import type { CatalogFile, CatalogMeta, CompactCatalog } from "@/lib/catalog/types";
 import type { InstallerMeta } from "@/lib/installer/command";
 
-export {
-  CATALOG_META_PUBLIC_PATH,
-  CATALOG_PUBLIC_PATH,
-  catalogUrl,
-} from "@/lib/catalog/paths";
-
 export async function loadCatalogFromDisk(
   cwd = process.cwd(),
 ): Promise<CatalogFile> {

@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import { AppProviders } from "@/components/mackit/app-providers";
 import { InlineScript } from "@/components/mackit/inline-script";
 import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
+import { UI_MODE_BOOTSTRAP_SCRIPT } from "@/lib/ui-mode";
 import "./globals.css";
 
 const inter = Inter({
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <InlineScript html={THEME_BOOTSTRAP_SCRIPT} />
+        <InlineScript html={UI_MODE_BOOTSTRAP_SCRIPT} />
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>

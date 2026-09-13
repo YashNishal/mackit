@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-12T10:34:29.717Z",
-  "formulaCount": 8136,
-  "caskCount": 6752,
-  "packageCount": 14888,
+  "generatedAt": "2026-09-13T15:21:14.276Z",
+  "formulaCount": 8137,
+  "caskCount": 6753,
+  "packageCount": 14890,
   "source": {
     "formula": "https://formulae.brew.sh/api/formula.json",
     "cask": "https://formulae.brew.sh/api/cask.json"

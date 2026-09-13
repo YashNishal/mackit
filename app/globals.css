@@ -216,3 +216,243 @@ body {
   background: oklch(0.235 0 0);
   color: oklch(0.9173 0.0133 82.4015);
 }
+
+@keyframes egg-jiggle {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-6deg) scale(1.08);
+  }
+  50% {
+    transform: rotate(5deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(-3deg) scale(1.07);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.egg-jiggle {
+  animation: egg-jiggle 0.35s ease;
+  transform-origin: center;
+}
+
+/* ================= Retro easter-egg mode =================
+   Everything below only applies when <html> has .retro.
+   The modern theme above stays the default. */
+
+html.retro {
+  --background: #efead8;
+  --foreground: #23221e;
+  --card: #efead8;
+  --card-foreground: #23221e;
+  --popover: #efead8;
+  --popover-foreground: #23221e;
+  --primary: #23221e;
+  --primary-foreground: #efead8;
+  --secondary: #efead8;
+  --secondary-foreground: #23221e;
+  --muted: #d9d4c3;
+  --muted-foreground: #5b574a;
+  --accent: #23221e;
+  --accent-foreground: #efead8;
+  --destructive: #23221e;
+  --border: #23221e;
+  --input: #23221e;
+  --ring: #23221e;
+  --chart-1: #23221e;
+  --chart-2: #5b574a;
+  --chart-3: #8a8574;
+  --chart-4: #b3ad9a;
+  --chart-5: #d9d4c3;
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+  --sidebar: #efead8;
+  --sidebar-foreground: #23221e;
+  --sidebar-primary: #23221e;
+  --sidebar-primary-foreground: #efead8;
+  --sidebar-accent: #23221e;
+  --sidebar-accent-foreground: #efead8;
+  --sidebar-border: #23221e;
+  --sidebar-ring: #23221e;
+  --destructive-foreground: #efead8;
+  --font-sans: "Charcoal", "ChicagoFLF", "Chicago", "Geneva", "Verdana", sans-serif;
+  --font-serif: "Charcoal", "ChicagoFLF", "Chicago", "Geneva", sans-serif;
+  --font-mono: "Monaco", "Menlo", "Courier New", monospace;
+  --font-display: "Charcoal", "ChicagoFLF", "Chicago", "Geneva", sans-serif;
+  --font-heading: "Charcoal", "ChicagoFLF", "Chicago", "Geneva", sans-serif;
+  --shadow-color: #23221e;
+  --shadow-opacity: 1;
+  --shadow-blur: 0;
+  --shadow-spread: 0;
+  --shadow-offset-x: 2px;
+  --shadow-offset-y: 2px;
+  --letter-spacing: 0;
+  --tracking-normal: 0;
+  --tracking-tighter: 0;
+  --tracking-tight: 0;
+  --tracking-wide: 0;
+  --tracking-wider: 0;
+  --tracking-widest: 0;
+  --shadow-2xs: 2px 2px 0 0 #23221e;
+  --shadow-xs: 2px 2px 0 0 #23221e;
+  --shadow-sm: 2px 2px 0 0 #23221e;
+  --shadow: 2px 2px 0 0 #23221e;
+  --shadow-md: 3px 3px 0 0 #23221e;
+  --shadow-lg: 4px 4px 0 0 #23221e;
+  --shadow-xl: 4px 4px 0 0 #23221e;
+  --shadow-2xl: 6px 6px 0 0 #23221e;
+  --desktop-bg: #4c4a44;
+  --desktop-pattern: rgba(0, 0, 0, 0.28);
+}
+
+html.dark.retro {
+  --background: #121210;
+  --foreground: #cfc9b8;
+  --card: #121210;
+  --card-foreground: #cfc9b8;
+  --popover: #121210;
+  --popover-foreground: #cfc9b8;
+  --primary: #cfc9b8;
+  --primary-foreground: #121210;
+  --secondary: #121210;
+  --secondary-foreground: #cfc9b8;
+  --muted: #1e1d1a;
+  --muted-foreground: #9b9688;
+  --accent: #cfc9b8;
+  --accent-foreground: #121210;
+  --destructive: #cfc9b8;
+  --destructive-foreground: #121210;
+  --border: #cfc9b8;
+  --input: #cfc9b8;
+  --ring: #cfc9b8;
+  --chart-1: #cfc9b8;
+  --chart-2: #9b9688;
+  --chart-3: #6e6a5e;
+  --chart-4: #3a3934;
+  --chart-5: #1e1d1a;
+  --sidebar: #121210;
+  --sidebar-foreground: #cfc9b8;
+  --sidebar-primary: #cfc9b8;
+  --sidebar-primary-foreground: #121210;
+  --sidebar-accent: #cfc9b8;
+  --sidebar-accent-foreground: #121210;
+  --sidebar-border: #cfc9b8;
+  --sidebar-ring: #cfc9b8;
+  --destructive-foreground: #121210;
+  --shadow-color: #cfc9b8;
+  --shadow-2xs: 2px 2px 0 0 #cfc9b8;
+  --shadow-xs: 2px 2px 0 0 #cfc9b8;
+  --shadow-sm: 2px 2px 0 0 #cfc9b8;
+  --shadow: 2px 2px 0 0 #cfc9b8;
+  --shadow-md: 3px 3px 0 0 #cfc9b8;
+  --shadow-lg: 4px 4px 0 0 #cfc9b8;
+  --shadow-xl: 4px 4px 0 0 #cfc9b8;
+  --shadow-2xl: 6px 6px 0 0 #cfc9b8;
+  --desktop-bg: #0a0a09;
+  --desktop-pattern: rgba(255, 255, 255, 0.08);
+}
+
+html.retro * {
+  border-radius: 0 !important;
+}
+
+html.retro body {
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: 0;
+  /* Low-shimmer desktop texture: 4px low-contrast dot grid, fixed so it
+     never crawls or moirés while scrolling. */
+  background-color: var(--desktop-bg);
+  background-image: radial-gradient(
+    var(--desktop-pattern) 1px,
+    transparent 1.3px
+  );
+  background-size: 4px 4px;
+  background-attachment: fixed;
+}
+
+html.retro ::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+html.retro :focus-visible {
+  outline: 2px dotted var(--foreground) !important;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+html.retro .font-display {
+  letter-spacing: 0;
+}
+
+/* Striped Finder title bar */
+html.retro .retro-stripes {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--foreground) 0,
+    var(--foreground) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+html.retro .retro-window {
+  background: var(--background);
+  border: 2px solid var(--foreground);
+  box-shadow: 4px 4px 0 0 var(--foreground);
+}
+
+html.retro .retro-window-inner {
+  border-top: 2px solid var(--foreground);
+}
+
+html.retro .retro-btn-default {
+  box-shadow: inset 0 0 0 2px var(--background), inset 0 0 0 4px var(--foreground);
+}
+
+html.retro .terminal-preview {
+  background: var(--foreground);
+  color: var(--background);
+  font-family: "Monaco", "Menlo", "Courier New", monospace;
+}
+
+/* Kill modern chrome in retro mode */
+html.retro .backdrop-blur-xl,
+html.retro .backdrop-blur,
+html.retro .supports-backdrop-filter\:backdrop-blur-xs {
+  backdrop-filter: none !important;
+}
+
+/* Classic square scrollbars in retro mode */
+html.retro * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--foreground) var(--background);
+}
+html.retro *::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+html.retro *::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 2px solid var(--foreground);
+}
+html.retro *::-webkit-scrollbar-thumb {
+  background: var(--background);
+  border: 2px solid var(--foreground);
+}
+html.retro *::-webkit-scrollbar-button {
+  background: var(--foreground);
+  border: 2px solid var(--foreground);
+  height: 14px;
+}
