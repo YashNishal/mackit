@@ -242,6 +242,7 @@ export function MacKitApp({
               <SearchBox
                 packages={packages}
                 selectedIds={selectedIds}
+                onToggle={toggle}
                 onDetails={showDetails}
                 disabled={Boolean(catalogError)}
               />
@@ -253,6 +254,7 @@ export function MacKitApp({
               key={category.id}
               category={category}
               selectedIds={selectedIds}
+              onToggle={toggle}
               onDetails={showDetails}
             />
           ))}
@@ -261,6 +263,7 @@ export function MacKitApp({
             bundles={bundles}
             selectedIds={selectedIds}
             onAddBundle={addBundle}
+            onToggle={toggle}
             onDetails={showDetails}
           />
         </div>

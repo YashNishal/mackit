@@ -3,6 +3,7 @@
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { PackageIcon } from "@/components/mackit/package-icon";
+import { PackageInfoButton } from "@/components/mackit/package-info-button";
 import { PackageTooltip } from "@/components/mackit/package-tooltip";
 import { Input } from "@/components/ui/input";
 import { kindLabel } from "@/lib/catalog/ids";
@@ -12,11 +13,13 @@ import type { CatalogPackage } from "@/lib/catalog/types";
 export function SearchBox({
   packages,
   selectedIds,
+  onToggle,
   onDetails,
   disabled,
 }: {
   packages: CatalogPackage[];
   selectedIds: Set<string>;
+  onToggle: (pkg: CatalogPackage) => void;
   onDetails: (pkg: CatalogPackage) => void;
   disabled?: boolean;
 }) {
@@ -77,7 +80,11 @@ export function SearchBox({
               setActive((value) => Math.max(value - 1, 0));
             } else if (event.key === "Enter" && hits[activeIndex]) {
               event.preventDefault();
-              openDetails(hits[activeIndex].pkg);
+              if (event.shiftKey) {
+                openDetails(hits[activeIndex].pkg);
+              } else {
+                onToggle(hits[activeIndex].pkg);
+              }
             } else if (event.key === "Escape") {
               setOpen(false);
             }
@@ -101,19 +108,33 @@ export function SearchBox({
             hits.map((hit, index) => {
               const selected = selectedIds.has(hit.pkg.id);
               return (
-                <li key={hit.pkg.id} role="option" aria-selected={index === activeIndex}>
+                <li
+                  key={hit.pkg.id}
+                  role="option"
+                  aria-selected={index === activeIndex}
+                  className={`flex items-center rounded-xl ${
+                    index === activeIndex ? "bg-muted" : "hover:bg-muted/70"
+                  }`}
+                  onMouseEnter={() => setActive(index)}
+                >
                   <PackageTooltip pkg={hit.pkg}>
                     <button
                       type="button"
-                      aria-label={`${hit.pkg.name} — view details`}
-                      className={`flex w-full items-center gap-3 rounded-xl px-2.5 py-2 text-left ${
-                        index === activeIndex ? "bg-muted" : "hover:bg-muted/70"
-                      }`}
-                      onMouseEnter={() => setActive(index)}
+                      aria-pressed={selected}
+                      aria-label={
+                        selected
+                          ? `Remove ${hit.pkg.name}`
+                          : `Add ${hit.pkg.name}`
+                      }
+                      className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
                       onFocus={() => setActive(index)}
-                      onClick={() => openDetails(hit.pkg)}
+                      onClick={() => onToggle(hit.pkg)}
                     >
-                      <PackageIcon pkg={hit.pkg} size="sm" />
+                      <PackageIcon
+                        pkg={hit.pkg}
+                        size="sm"
+                        selected={selected}
+                      />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium">
                           {hit.pkg.name}
@@ -127,6 +148,12 @@ export function SearchBox({
                       </span>
                     </button>
                   </PackageTooltip>
+                  <PackageInfoButton
+                    pkg={hit.pkg}
+                    onDetails={openDetails}
+                    tabIndex={-1}
+                    className="mr-2 shrink-0"
+                  />
                 </li>
               );
             })

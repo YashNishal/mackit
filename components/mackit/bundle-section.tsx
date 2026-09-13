@@ -2,6 +2,7 @@
 
 import { Check, Plus } from "lucide-react";
 import { PackageIcon } from "@/components/mackit/package-icon";
+import { PackageInfoButton } from "@/components/mackit/package-info-button";
 import { PackageTooltip } from "@/components/mackit/package-tooltip";
 import { Button } from "@/components/ui/button";
 import type { ResolvedBundle } from "@/data/categories";
@@ -12,11 +13,13 @@ export function BundleSection({
   bundles,
   selectedIds,
   onAddBundle,
+  onToggle,
   onDetails,
 }: {
   bundles: ResolvedBundle[];
   selectedIds: Set<string>;
   onAddBundle: (packages: CatalogPackage[]) => void;
+  onToggle: (pkg: CatalogPackage) => void;
   onDetails: (pkg: CatalogPackage) => void;
 }) {
   if (bundles.length === 0) {
@@ -36,8 +39,8 @@ export function BundleSection({
           Start from a bundle
         </h2>
         <p className="text-sm text-muted-foreground">
-          One click adds a curated setup. Hover an app for details, click it to
-          open more, or remove anything you don&apos;t want.
+          One click adds a curated setup. Click an app to add or remove it, or
+          open its info for the install command and homepage.
         </p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -69,30 +72,47 @@ export function BundleSection({
                   const selected = selectedIds.has(pkg.id);
                   return (
                     <li key={pkg.id} className="min-w-0">
-                      <PackageTooltip pkg={pkg}>
-                        <button
-                          type="button"
-                          aria-label={`${pkg.name} — view details`}
-                          onClick={() => onDetails(pkg)}
-                          className={cn(
-                            "inline-flex max-w-full items-center gap-1.5 rounded-lg border bg-background py-1 pr-2 pl-1 text-left transition-colors hover:border-primary/50 hover:bg-muted",
-                            selected &&
-                              "border-primary/60 bg-primary/10 hover:bg-primary/15",
-                          )}
-                        >
-                          <PackageIcon
-                            pkg={pkg}
-                            size="sm"
-                            selected={selected}
-                          />
-                          <span className="max-w-28 truncate text-xs font-medium">
-                            {pkg.name}
-                          </span>
-                          {selected ? (
-                            <Check className="size-3.5 shrink-0 text-primary" />
-                          ) : null}
-                        </button>
-                      </PackageTooltip>
+                      <div
+                        className={cn(
+                          "group/pkg relative inline-flex max-w-full items-center rounded-lg border bg-background transition-colors hover:border-primary/50",
+                          selected && "border-primary/60 bg-primary/10",
+                        )}
+                      >
+                        <PackageTooltip pkg={pkg}>
+                          <button
+                            type="button"
+                            aria-pressed={selected}
+                            aria-label={
+                              selected
+                                ? `Remove ${pkg.name}`
+                                : `Add ${pkg.name}`
+                            }
+                            onClick={() => onToggle(pkg)}
+                            className={cn(
+                              "inline-flex min-w-0 items-center gap-1.5 py-1 pr-2 pl-1 text-left hover:bg-muted",
+                              selected && "hover:bg-primary/15",
+                            )}
+                          >
+                            <PackageIcon
+                              pkg={pkg}
+                              size="sm"
+                              selected={selected}
+                            />
+                            <span className="max-w-28 truncate text-xs font-medium">
+                              {pkg.name}
+                            </span>
+                            {selected ? (
+                              <Check className="size-3.5 shrink-0 text-primary" />
+                            ) : null}
+                          </button>
+                        </PackageTooltip>
+                        <PackageInfoButton
+                          pkg={pkg}
+                          onDetails={onDetails}
+                          reveal="hover"
+                          className="absolute -top-1.5 -right-1.5 z-10"
+                        />
+                      </div>
                     </li>
                   );
                 })}

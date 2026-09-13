@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Check, ExternalLink, Plus } from "lucide-react";
 import { PackageIcon } from "@/components/mackit/package-icon";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,21 @@ export function brewInstallSnippet(pkg: CatalogPackage): string {
     : `brew install ${pkg.token}`;
 }
 
+function SpecField({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="min-w-0">
+      <dt className="text-muted-foreground">{label}</dt>
+      <dd className="mt-0.5 font-mono text-xs wrap-anywhere">{children}</dd>
+    </div>
+  );
+}
+
 export function PackageDetailsDialog({
   pkg,
   selected,
@@ -33,14 +49,16 @@ export function PackageDetailsDialog({
 }) {
   return (
     <Dialog open={pkg !== null} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[380px]">
+      <DialogContent className="w-[calc(100%-2rem)] min-w-0 overflow-hidden sm:max-w-88">
         {pkg ? (
           <>
-            <DialogHeader>
+            <DialogHeader className="pr-8">
               <div className="flex items-start gap-3">
                 <PackageIcon pkg={pkg} size="md" selected={selected} />
                 <div className="min-w-0 flex-1">
-                  <DialogTitle className="text-left">{pkg.name}</DialogTitle>
+                  <DialogTitle className="text-left leading-snug text-balance">
+                    {pkg.name}
+                  </DialogTitle>
                   <DialogDescription className="mt-1 text-left">
                     {pkg.desc || "No description provided by Homebrew."}
                   </DialogDescription>
@@ -48,31 +66,20 @@ export function PackageDetailsDialog({
               </div>
             </DialogHeader>
 
-            <div className="flex flex-wrap items-center gap-1.5">
-              <Badge variant="secondary">{kindLabel(pkg.kind)}</Badge>
-              {pkg.version ? (
-                <Badge variant="outline">v{pkg.version}</Badge>
-              ) : null}
-            </div>
+            <Badge variant="secondary" className="w-fit">
+              {kindLabel(pkg.kind)}
+            </Badge>
 
-            <dl className="grid gap-2 rounded-xl border bg-muted/40 p-3 text-sm">
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground">Homebrew ID</dt>
-                <dd className="truncate font-mono text-xs">{pkg.id}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground">Install</dt>
-                <dd className="truncate font-mono text-xs">
-                  {brewInstallSnippet(pkg)}
-                </dd>
-              </div>
+            <dl className="grid min-w-0 gap-3 rounded-xl border bg-muted/40 p-3 text-sm">
+              {pkg.version ? (
+                <SpecField label="Version">{pkg.version}</SpecField>
+              ) : null}
+              <SpecField label="Homebrew ID">{pkg.id}</SpecField>
+              <SpecField label="Install">{brewInstallSnippet(pkg)}</SpecField>
               {pkg.aliases.length > 0 ? (
-                <div className="flex items-center justify-between gap-3">
-                  <dt className="text-muted-foreground">Also matches</dt>
-                  <dd className="truncate text-xs">
-                    {pkg.aliases.slice(0, 4).join(", ")}
-                  </dd>
-                </div>
+                <SpecField label="Also matches">
+                  {pkg.aliases.slice(0, 4).join(", ")}
+                </SpecField>
               ) : null}
             </dl>
 

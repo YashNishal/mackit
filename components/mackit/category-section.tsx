@@ -7,10 +7,12 @@ import type { CatalogPackage } from "@/lib/catalog/types";
 export function CategorySection({
   category,
   selectedIds,
+  onToggle,
   onDetails,
 }: {
   category: ResolvedCategory;
   selectedIds: Set<string>;
+  onToggle: (pkg: CatalogPackage) => void;
   onDetails: (pkg: CatalogPackage) => void;
 }) {
   return (
@@ -30,6 +32,7 @@ export function CategorySection({
             key={pkg.id}
             pkg={pkg}
             selected={selectedIds.has(pkg.id)}
+            onToggle={onToggle}
             onDetails={onDetails}
           />
         ))}
