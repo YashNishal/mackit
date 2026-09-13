@@ -2,7 +2,8 @@ name: Refresh catalog
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+  // once a month
+    - cron: "0 6 1 * *"
   workflow_dispatch:
 
 jobs:
