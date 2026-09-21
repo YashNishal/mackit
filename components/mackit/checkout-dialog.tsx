@@ -60,8 +60,8 @@ export function CheckoutDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-h-[90vh] min-w-0 overflow-x-hidden overflow-y-auto sm:max-w-2xl">
+        <DialogHeader className="pr-8">
           <DialogTitle>Install on this Mac</DialogTitle>
           <DialogDescription>
             MacKit cannot install apps from the browser. Copy one command, paste
@@ -69,8 +69,8 @@ export function CheckoutDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <ol className="grid gap-3 text-sm">
-          <li className="rounded-xl border bg-muted/40 p-3">
+        <ol className="grid min-w-0 gap-3 text-sm">
+          <li className="min-w-0 rounded-xl border bg-muted/40 p-3">
             <p className="font-medium">1. Open Terminal</p>
             <p className="mt-1 text-muted-foreground">
               Press <kbd className="rounded border bg-background px-1 font-mono text-xs">Command</kbd>
@@ -79,10 +79,10 @@ export function CheckoutDialog({
               , type Terminal, then press Return.
             </p>
           </li>
-          <li className="rounded-xl border bg-muted/40 p-3">
+          <li className="min-w-0 rounded-xl border bg-muted/40 p-3">
             <p className="font-medium">2. Copy this command</p>
-            <div className="mt-2 overflow-hidden rounded-xl">
-              <pre className="terminal-preview max-h-40 overflow-auto p-3 font-mono text-[11px] leading-5 whitespace-pre-wrap">
+            <div className="mt-2 min-w-0 overflow-hidden rounded-xl">
+              <pre className="terminal-preview max-h-40 max-w-full overflow-auto p-3 font-mono text-[11px] leading-5 wrap-anywhere whitespace-pre-wrap">
                 {command}
               </pre>
             </div>
@@ -91,7 +91,7 @@ export function CheckoutDialog({
               {copied ? "Copied" : "Copy command"}
             </Button>
           </li>
-          <li className="rounded-xl border bg-muted/40 p-3">
+          <li className="min-w-0 rounded-xl border bg-muted/40 p-3">
             <p className="font-medium">3. Paste, press Return, and confirm</p>
             <p className="mt-1 text-muted-foreground">
               If extra tools are needed first, the script explains and asks
@@ -101,12 +101,12 @@ export function CheckoutDialog({
           </li>
         </ol>
 
-        <div className="overflow-hidden rounded-xl border">
+        <div className="min-w-0 overflow-hidden rounded-xl border">
           <div className="terminal-preview flex items-center gap-2 px-3 py-2 font-mono text-[11px]">
-            <Terminal className="size-3.5" />
+            <Terminal className="size-3.5 shrink-0" />
             <span>Expected installer stages</span>
           </div>
-          <pre className="terminal-preview border-t border-white/10 p-3 font-mono text-[11px] leading-5">
+          <pre className="terminal-preview max-w-full overflow-x-auto border-t border-white/10 p-3 font-mono text-[11px] leading-5 wrap-anywhere whitespace-pre-wrap">
 {`MacKit: Using /opt/homebrew/bin/brew on arm64 macOS 15.x
 MacKit: Installed visual-studio-code
 MacKit: Skipped wget (already installed)
@@ -118,7 +118,7 @@ MacKit summary
           </pre>
         </div>
 
-        <Tabs defaultValue="packages">
+        <Tabs defaultValue="packages" className="min-w-0">
           <TabsList>
             <TabsTrigger value="packages">Packages</TabsTrigger>
             <TabsTrigger value="script">Installer script</TabsTrigger>
@@ -127,25 +127,26 @@ MacKit summary
           <TabsContent value="packages" className="rounded-xl border p-3">
             <ul className="space-y-1 text-sm">
               {items.map((item) => (
-                <li key={item.id} className="flex justify-between gap-3">
-                  <span>{item.name}</span>
-                  <code className="font-mono text-[11px] text-muted-foreground">
+                <li key={item.id} className="flex min-w-0 justify-between gap-3">
+                  <span className="min-w-0 truncate">{item.name}</span>
+                  <code className="shrink-0 font-mono text-[11px] text-muted-foreground">
                     {item.id}
                   </code>
                 </li>
               ))}
             </ul>
           </TabsContent>
-          <TabsContent value="script">
+          <TabsContent value="script" className="min-w-0">
             <p className="mb-2 text-sm text-muted-foreground">
-              Runner SHA-256: <code className="font-mono text-[11px]">{sha256}</code>
+              Runner SHA-256:{" "}
+              <code className="font-mono text-[11px] wrap-anywhere">{sha256}</code>
             </p>
-            <ScrollArea className="h-56 rounded-xl border">
-              <pre className="p-3 font-mono text-[11px] leading-5 whitespace-pre-wrap">
+            <ScrollArea className="h-56 min-w-0 rounded-xl border">
+              <pre className="max-w-full p-3 font-mono text-[11px] leading-5 wrap-anywhere whitespace-pre-wrap">
                 {runnerSource}
               </pre>
             </ScrollArea>
-            <p className="mt-2 font-mono text-[11px] text-muted-foreground whitespace-pre-wrap">
+            <p className="mt-2 max-w-full font-mono text-[11px] text-muted-foreground wrap-anywhere whitespace-pre-wrap">
               {manifest}
             </p>
           </TabsContent>

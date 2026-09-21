@@ -59,7 +59,7 @@ export function CheckoutDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="max-h-[90vh] overflow-y-auto border-2 border-foreground bg-background p-0 shadow-[6px_6px_0_0_var(--foreground)] sm:max-w-2xl">
+      <DialogContent showCloseButton={false} className="max-h-[90vh] min-w-0 overflow-x-hidden overflow-y-auto border-2 border-foreground bg-background p-0 shadow-[6px_6px_0_0_var(--foreground)] sm:max-w-2xl">
         <div className="flex items-center gap-2 border-b-2 border-foreground px-2 py-1">
           <button
             type="button"
@@ -74,7 +74,7 @@ export function CheckoutDialog({
           <span aria-hidden="true" className="retro-stripes h-3 flex-1" />
         </div>
 
-        <div className="space-y-3 p-4">
+        <div className="min-w-0 space-y-3 p-4">
           <DialogHeader>
             <DialogTitle className="text-left text-[15px] font-bold">Install on this Mac</DialogTitle>
             <DialogDescription className="text-left text-[13px]">
@@ -83,8 +83,8 @@ export function CheckoutDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <ol className="grid gap-3 text-[13px]">
-            <li className="border-2 border-foreground p-3">
+          <ol className="grid min-w-0 gap-3 text-[13px]">
+            <li className="min-w-0 border-2 border-foreground p-3">
               <p className="font-bold">1. Open Terminal</p>
               <p className="mt-1">
                 Press <kbd className="border border-foreground px-1 font-mono text-xs">Command</kbd>
@@ -93,10 +93,10 @@ export function CheckoutDialog({
                 , type Terminal, then press Return.
               </p>
             </li>
-            <li className="border-2 border-foreground p-3">
+            <li className="min-w-0 border-2 border-foreground p-3">
               <p className="font-bold">2. Copy this command</p>
-              <div className="mt-2 overflow-hidden border-2 border-foreground">
-                <pre className="terminal-preview max-h-40 overflow-auto p-3 font-mono text-[11px] leading-5 whitespace-pre-wrap">
+              <div className="mt-2 min-w-0 overflow-hidden border-2 border-foreground">
+                <pre className="terminal-preview max-h-40 max-w-full overflow-auto p-3 font-mono text-[11px] leading-5 wrap-anywhere whitespace-pre-wrap">
                   {command}
                 </pre>
               </div>
@@ -104,7 +104,7 @@ export function CheckoutDialog({
                 {copied ? "Copied" : "Copy command"}
               </Button>
             </li>
-            <li className="border-2 border-foreground p-3">
+            <li className="min-w-0 border-2 border-foreground p-3">
               <p className="font-bold">3. Paste, press Return, and confirm</p>
               <p className="mt-1">
                 If extra tools are needed first, the script explains and asks
@@ -114,11 +114,11 @@ export function CheckoutDialog({
             </li>
           </ol>
 
-          <div className="overflow-hidden border-2 border-foreground">
+          <div className="min-w-0 overflow-hidden border-2 border-foreground">
             <div className="terminal-preview flex items-center gap-2 border-b border-background/30 px-3 py-2 font-mono text-[11px]">
               <span>Expected installer stages</span>
             </div>
-            <pre className="terminal-preview border-t border-white/10 p-3 font-mono text-[11px] leading-5">
+            <pre className="terminal-preview max-w-full overflow-x-auto border-t border-white/10 p-3 font-mono text-[11px] leading-5 wrap-anywhere whitespace-pre-wrap">
 {`MacKit: Using /opt/homebrew/bin/brew on arm64 macOS 15.x
 MacKit: Installed visual-studio-code
 MacKit: Skipped wget (already installed)
@@ -130,7 +130,7 @@ MacKit summary
             </pre>
           </div>
 
-          <Tabs defaultValue="packages">
+          <Tabs defaultValue="packages" className="min-w-0">
             <TabsList className="border-2 border-foreground">
               <TabsTrigger value="packages">Packages</TabsTrigger>
               <TabsTrigger value="script">Installer script</TabsTrigger>
@@ -152,12 +152,12 @@ MacKit summary
               <p className="mb-2 text-[13px]">
                 Runner SHA-256: <code className="font-mono text-[11px] break-all">{sha256}</code>
               </p>
-              <ScrollArea className="h-56 border-2 border-foreground">
-                <pre className="p-3 font-mono text-[11px] leading-5 whitespace-pre-wrap">
+              <ScrollArea className="h-56 min-w-0 border-2 border-foreground">
+                <pre className="max-w-full p-3 font-mono text-[11px] leading-5 wrap-anywhere whitespace-pre-wrap">
                   {runnerSource}
                 </pre>
               </ScrollArea>
-              <p className="mt-2 font-mono text-[11px] whitespace-pre-wrap break-all">
+              <p className="mt-2 max-w-full font-mono text-[11px] wrap-anywhere whitespace-pre-wrap">
                 {manifest}
               </p>
             </TabsContent>
