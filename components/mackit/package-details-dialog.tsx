@@ -1,9 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Check, ExternalLink, Plus } from "lucide-react";
+import { ExternalLink, Minus, Plus } from "lucide-react";
 import { PackageIcon } from "@/components/mackit/package-icon";
-import { Badge } from "@/components/ui/badge";
+import { TechnicalDetails } from "@/components/mackit/technical-details";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { kindLabel } from "@/lib/catalog/ids";
 import type { CatalogPackage } from "@/lib/catalog/types";
 
 export function brewInstallSnippet(pkg: CatalogPackage): string {
@@ -23,15 +22,19 @@ export function brewInstallSnippet(pkg: CatalogPackage): string {
 
 function SpecField({
   label,
+  mono = false,
   children,
 }: {
   label: string;
+  mono?: boolean;
   children: ReactNode;
 }) {
   return (
     <div className="min-w-0">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 font-mono text-xs wrap-anywhere">{children}</dd>
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd className={mono ? "mt-0.5 font-mono text-xs wrap-anywhere" : "mt-0.5 wrap-anywhere"}>
+        {children}
+      </dd>
     </div>
   );
 }
@@ -66,22 +69,26 @@ export function PackageDetailsDialog({
               </div>
             </DialogHeader>
 
-            <Badge variant="secondary" className="w-fit">
-              {kindLabel(pkg.kind)}
-            </Badge>
-
-            <dl className="grid min-w-0 gap-3 rounded-xl border bg-muted/40 p-3 text-sm">
+            <dl className="grid min-w-0 grid-cols-2 gap-3 rounded-[12px] border bg-card p-3 text-sm">
+              <SpecField label="Type">
+                {pkg.kind === "cask" ? "App" : "Command-line tool"}
+              </SpecField>
               {pkg.version ? (
                 <SpecField label="Version">{pkg.version}</SpecField>
               ) : null}
-              <SpecField label="Homebrew ID">{pkg.id}</SpecField>
-              <SpecField label="Install">{brewInstallSnippet(pkg)}</SpecField>
-              {pkg.aliases.length > 0 ? (
-                <SpecField label="Also matches">
-                  {pkg.aliases.slice(0, 4).join(", ")}
-                </SpecField>
-              ) : null}
             </dl>
+
+            <TechnicalDetails>
+              <dl className="grid min-w-0 gap-3 rounded-[12px] border bg-muted/40 p-3 text-sm">
+                <SpecField label="Homebrew ID" mono>{pkg.id}</SpecField>
+                <SpecField label="Install manually" mono>{brewInstallSnippet(pkg)}</SpecField>
+                {pkg.aliases.length > 0 ? (
+                  <SpecField label="Also matches">
+                    {pkg.aliases.slice(0, 4).join(", ")}
+                  </SpecField>
+                ) : null}
+              </dl>
+            </TechnicalDetails>
 
             <div className="grid gap-2">
               <Button
@@ -90,11 +97,11 @@ export function PackageDetailsDialog({
                 onClick={() => onToggle(pkg)}
               >
                 {selected ? (
-                  <Check data-icon="inline-start" />
+                  <Minus data-icon="inline-start" />
                 ) : (
                   <Plus data-icon="inline-start" />
                 )}
-                {selected ? "Added — remove" : "Add to cart"}
+                {selected ? "Remove from Dock" : "Add to Dock"}
               </Button>
               {pkg.homepage ? (
                 <Button
@@ -110,7 +117,7 @@ export function PackageDetailsDialog({
                     />
                   }
                 >
-                  Vendor homepage
+                  Visit website
                   <ExternalLink data-icon="inline-end" />
                 </Button>
               ) : null}

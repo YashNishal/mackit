@@ -59,18 +59,20 @@ flowchart LR
 - Hero: “Set up your Mac in one go.” Large search field for any Homebrew app or CLI tool.
 - Featured categories: Browsers, Communication, Development, Design, Productivity, Media, Utilities.
 - Package cards: name, one-line purpose, formula/cask type, Add / Added.
-- Desktop sticky cart after the first selection; mobile bottom bar opening a sheet.
+- The cart is a floating Dock pinned to the bottom on every screen size: picked app icons, share, clear (with undo), and Install. Its first tile jumps to search; five quick clicks enable retro mode.
 - Checkout: open Terminal, copy command, paste, follow Homebrew confirmation if needed.
 - Share encodes cart IDs in the URL with no account or upload.
+- Homebrew stays out of the everyday UI so installs feel like they just happen. Homebrew IDs, `brew install` commands, the runner source and checksum sit behind collapsed "Technical details" in the details and checkout dialogs, and "Under the hood" on How it works. Safety names Homebrew once, because that page is about trust.
+- Retro easter eggs: search "retro", "classic", "classic mac", "1984", "system 7" or "macintosh" for a hidden Classic Mac result, or click the Dock's first tile five times quickly.
 
 ## Visual system
 
-- macOS-native clarity with Cursor-inspired restraint: generous spacing, compact controls, fine separators.
-- System UI font stack for interface copy; Geist Mono for tokens, keyboard hints, and installer output.
-- Light: warm near-white canvas, cool gray surfaces. Dark: deep graphite, not pure black.
-- Controlled blue-violet accent for selection, focus, and primary actions.
-- Translucent sticky header and cart; opaque cards. 14–16px radii, one-pixel borders, restrained shadows.
-- Motion 160–220ms; `prefers-reduced-motion` disables nonessential movement.
+- The Dock is the one bold element; everything else stays quiet and native.
+- SF Pro via the system font stack (Inter as fallback off Apple devices); JetBrains Mono only for commands and tokens.
+- Light: aluminum `#F3F3F5` canvas, white surfaces, graphite `#1C1C1F` ink. Dark: space gray `#1D1D20` / `#28282C`.
+- Homebrew amber (`#F5A524`, dark `#FFB547`) for selection, focus, and primary actions. Used as a fill with ink text, never as thin text.
+- Catalog sections use a two-column rhythm: section name on the left, content on the right. App icons sit on white squircle tiles.
+- Motion: an icon landing in the Dock is the only orchestrated moment; `prefers-reduced-motion` disables it.
 
 ## Installer security
 

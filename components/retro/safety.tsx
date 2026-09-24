@@ -25,12 +25,12 @@ export function RetroSafety() {
                 SHA-256 digest before executing it.
               </li>
               <li>
-                The runner accepts only a typed list of Homebrew tokens. It rejects
+                The runner accepts only a typed list of known app IDs. It rejects
                 flags, paths, and extra commands.
               </li>
               <li>
-                Homebrew itself may ask for your Mac password. MacKit does not use
-                sudo.
+                Your Mac may ask for your password while some apps install.
+                MacKit does not use sudo.
               </li>
               <li>
                 Checkout shows the runner source, checksum, and package list before
@@ -38,8 +38,9 @@ export function RetroSafety() {
               </li>
             </ul>
             <p>
-              You still need to trust this website and Homebrew. Read the generated
-              command. If anything looks unexpected, do not run it.
+              Apps are installed with Homebrew, so you still need to trust this
+              website and Homebrew. Read the generated command. If anything
+              looks unexpected, do not run it.
             </p>
             <p>
               <Link href="/" className="border border-foreground px-2 py-1 font-bold hover:bg-foreground hover:text-background">

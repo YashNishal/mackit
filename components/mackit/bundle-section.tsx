@@ -29,21 +29,17 @@ export function BundleSection({
   return (
     <section
       aria-labelledby="bundles"
-      className="space-y-4 border-t border-border/70 pt-8"
+      className="grid gap-4 border-t py-8 md:grid-cols-[13rem_1fr] md:gap-8"
     >
-      <div className="max-w-xl">
-        <h2
-          id="bundles"
-          className="font-display text-lg font-semibold tracking-tight"
-        >
-          Start from a bundle
+      <div className="md:pt-4">
+        <h2 id="bundles" className="text-[17px] font-semibold tracking-[-0.01em]">
+          Bundles
         </h2>
-        <p className="text-sm text-muted-foreground">
-          One click adds a curated setup. Click an app to add or remove it, or
-          open its info for details and the vendor site.
+        <p className="mt-1 max-w-[34ch] text-sm leading-5 text-muted-foreground">
+          Common setups in one click. Remove anything you don’t need.
         </p>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <ul className="divide-y overflow-hidden rounded-2xl border bg-card">
         {bundles.map((bundle) => {
           const missing = bundle.packages.filter(
             (pkg) => !selectedIds.has(pkg.id),
@@ -52,32 +48,39 @@ export function BundleSection({
             bundle.packages.length > 0 && missing.length === 0;
 
           return (
-            <div
+            <li
               key={bundle.id}
-              className="flex flex-col gap-3 rounded-2xl border bg-card/80 p-4"
+              className="grid gap-3 p-4 sm:grid-cols-[1fr_auto] sm:items-start sm:gap-x-6"
             >
-              <div>
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-semibold">{bundle.label}</h3>
-                  <span className="font-mono text-[11px] text-muted-foreground">
-                    {bundle.packages.length} apps
-                  </span>
-                </div>
+              <div className="min-w-0">
+                <h3 className="text-[15px] font-semibold">{bundle.label}</h3>
                 <p className="mt-0.5 text-sm text-muted-foreground">
                   {bundle.description}
                 </p>
               </div>
+              <Button
+                variant={complete ? "ghost" : "outline"}
+                disabled={complete}
+                onClick={() => onAddBundle(missing)}
+                className="order-last h-8 w-fit rounded-[9px] bg-card px-3 sm:order-none sm:row-span-2 sm:justify-self-end"
+              >
+                {complete ? (
+                  <Check data-icon="inline-start" />
+                ) : (
+                  <Plus data-icon="inline-start" />
+                )}
+                {complete
+                  ? "All added"
+                  : missing.length === bundle.packages.length
+                    ? `Add all ${bundle.packages.length}`
+                    : `Add ${missing.length} more`}
+              </Button>
               <ul className="flex flex-wrap gap-1.5">
                 {bundle.packages.map((pkg) => {
                   const selected = selectedIds.has(pkg.id);
                   return (
                     <li key={pkg.id} className="min-w-0">
-                      <div
-                        className={cn(
-                          "group/pkg relative inline-flex max-w-full items-center rounded-lg border bg-background transition-colors hover:border-primary/50",
-                          selected && "border-primary/60 bg-primary/10",
-                        )}
-                      >
+                      <div className="group/pkg relative inline-flex max-w-full">
                         <PackageTooltip pkg={pkg}>
                           <button
                             type="button"
@@ -89,20 +92,18 @@ export function BundleSection({
                             }
                             onClick={() => onToggle(pkg)}
                             className={cn(
-                              "inline-flex min-w-0 items-center gap-1.5 py-1 pr-2 pl-1 text-left hover:bg-muted",
-                              selected && "hover:bg-primary/15",
+                              "inline-flex min-w-0 items-center gap-2 rounded-[11px] py-1 pr-2.5 pl-1 text-left transition-colors duration-150",
+                              selected
+                                ? "bg-primary/20 hover:bg-primary/30 dark:bg-primary/15 dark:hover:bg-primary/25"
+                                : "bg-muted/70 hover:bg-muted",
                             )}
                           >
-                            <PackageIcon
-                              pkg={pkg}
-                              size="sm"
-                              selected={selected}
-                            />
-                            <span className="max-w-28 truncate text-xs font-medium">
+                            <PackageIcon pkg={pkg} size="sm" />
+                            <span className="max-w-32 truncate text-[13px]">
                               {pkg.name}
                             </span>
                             {selected ? (
-                              <Check className="size-3.5 shrink-0 text-primary" />
+                              <Check className="size-3.5 shrink-0 stroke-3" />
                             ) : null}
                           </button>
                         </PackageTooltip>
@@ -117,27 +118,10 @@ export function BundleSection({
                   );
                 })}
               </ul>
-              <Button
-                variant={complete ? "secondary" : "outline"}
-                disabled={complete}
-                onClick={() => onAddBundle(missing)}
-                className="mt-auto w-full"
-              >
-                {complete ? (
-                  <Check data-icon="inline-start" />
-                ) : (
-                  <Plus data-icon="inline-start" />
-                )}
-                {complete
-                  ? "All added"
-                  : missing.length === bundle.packages.length
-                    ? `Add all ${bundle.packages.length}`
-                    : `Add ${missing.length} remaining`}
-              </Button>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </section>
   );
 }

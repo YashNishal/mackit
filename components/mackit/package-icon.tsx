@@ -7,9 +7,9 @@ import {
 import type { CatalogPackage } from "@/lib/catalog/types";
 
 const SIZES = {
-  sm: { wrap: "size-8 rounded-[10px]", icon: 16 },
-  md: { wrap: "size-10 rounded-[12px]", icon: 22 },
-  lg: { wrap: "size-14 rounded-[18px]", icon: 32 },
+  sm: { wrap: "size-8 rounded-[9px]", icon: 17 },
+  md: { wrap: "size-11 rounded-[12px]", icon: 24 },
+  lg: { wrap: "size-14 rounded-[15px]", icon: 30 },
 } as const;
 
 export function PackageIcon({
@@ -28,10 +28,8 @@ export function PackageIcon({
     <span
       aria-hidden="true"
       className={cn(
-        "flex shrink-0 items-center justify-center border text-foreground",
-        selected
-          ? "border-primary bg-primary/20"
-          : "border-border/80 bg-secondary",
+        "icon-tile flex shrink-0 items-center justify-center text-foreground transition-shadow duration-150",
+        selected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
         dims.wrap,
       )}
     >

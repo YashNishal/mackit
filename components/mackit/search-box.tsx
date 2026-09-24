@@ -2,13 +2,31 @@
 
 import { Search } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import { PackageIcon } from "@/components/mackit/package-icon";
 import { PackageInfoButton } from "@/components/mackit/package-info-button";
 import { PackageTooltip } from "@/components/mackit/package-tooltip";
+import { useMode } from "@/components/mode-provider";
 import { Input } from "@/components/ui/input";
 import { kindLabel } from "@/lib/catalog/ids";
 import { searchCatalog } from "@/lib/catalog/search";
 import type { CatalogPackage } from "@/lib/catalog/types";
+
+/** Typing any of these reveals a hidden result that opens the retro UI. */
+const RETRO_QUERIES = new Set(["retro", "classic", "classic mac", "1984", "system 7", "macintosh"]);
+
+function HappyMac({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <rect x="5" y="2" width="14" height="19" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="7.5" y="4.5" width="9" height="7.5" rx="1" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M10.2 6.6v1.1M13.8 6.6v1.1" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M10.2 9.6c1.1.9 2.5.9 3.6 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M12.5 15.5h4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M6.5 21v1h11v-1" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
 
 export function SearchBox({
   packages,
@@ -33,7 +51,19 @@ export function SearchBox({
     () => searchCatalog(packages, query, 12),
     [packages, query],
   );
-  const activeIndex = hits.length === 0 ? 0 : Math.min(active, hits.length - 1);
+  const { setMode } = useMode();
+  const retro = RETRO_QUERIES.has(query.trim().toLowerCase());
+  const offset = retro ? 1 : 0;
+  const rowCount = hits.length + offset;
+  const activeIndex = rowCount === 0 ? 0 : Math.min(active, rowCount - 1);
+
+  function enterRetro() {
+    setOpen(false);
+    setQuery("");
+    setMode("retro");
+    toast.success("Welcome back to 1984.");
+    window.scrollTo({ top: 0 });
+  }
 
   useEffect(() => {
     function onPointerDown(event: PointerEvent) {
@@ -54,16 +84,16 @@ export function SearchBox({
   return (
     <div ref={rootRef} className="relative">
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-muted-foreground" />
         <Input
           value={query}
           disabled={disabled}
-          placeholder="Search apps and tools"
+          placeholder={`Search ${packages.length.toLocaleString("en")} apps and tools`}
           aria-autocomplete="list"
           aria-controls={listId}
-          aria-expanded={open && hits.length > 0}
+          aria-expanded={open && rowCount > 0}
           role="combobox"
-          className="h-14 rounded-xl border-border/80 bg-card/90 pr-16 pl-12 text-base shadow-lg md:text-base"
+          className="h-13 rounded-[14px] border-input bg-card pr-14 pl-11 text-base shadow-xs placeholder:text-muted-foreground/80 focus-visible:border-ring focus-visible:ring-4 focus-visible:ring-primary/25 focus-visible:ring-offset-0 md:text-base dark:bg-card"
           onChange={(event) => {
             setQuery(event.target.value);
             setActive(0);
@@ -74,23 +104,27 @@ export function SearchBox({
             if (event.key === "ArrowDown") {
               event.preventDefault();
               setOpen(true);
-              setActive((value) => Math.min(value + 1, Math.max(hits.length - 1, 0)));
+              setActive((value) => Math.min(value + 1, Math.max(rowCount - 1, 0)));
             } else if (event.key === "ArrowUp") {
               event.preventDefault();
               setActive((value) => Math.max(value - 1, 0));
-            } else if (event.key === "Enter" && hits[activeIndex]) {
+            } else if (event.key === "Enter" && retro && activeIndex === 0) {
               event.preventDefault();
+              enterRetro();
+            } else if (event.key === "Enter" && hits[activeIndex - offset]) {
+              event.preventDefault();
+              const hit = hits[activeIndex - offset];
               if (event.shiftKey) {
-                openDetails(hits[activeIndex].pkg);
+                openDetails(hit.pkg);
               } else {
-                onToggle(hits[activeIndex].pkg);
+                onToggle(hit.pkg);
               }
             } else if (event.key === "Escape") {
               setOpen(false);
             }
           }}
         />
-        <kbd className="pointer-events-none absolute top-1/2 right-4 hidden -translate-y-1/2 rounded-md border bg-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:inline">
+        <kbd className="pointer-events-none absolute top-1/2 right-4 hidden -translate-y-1/2 rounded-[6px] border bg-background px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:inline">
           /
         </kbd>
       </div>
@@ -98,9 +132,34 @@ export function SearchBox({
         <ul
           id={listId}
           role="listbox"
-          className="absolute z-30 mt-2 max-h-80 w-full overflow-auto rounded-xl border bg-popover p-1.5 shadow-lg"
+          className="absolute z-30 mt-2 max-h-96 w-full overflow-auto rounded-[14px] border bg-popover p-1.5 shadow-xl"
         >
-          {hits.length === 0 ? (
+          {retro ? (
+            <li
+              role="option"
+              aria-selected={activeIndex === 0}
+              className={`flex items-center rounded-[10px] ${activeIndex === 0 ? "bg-muted" : ""}`}
+              onMouseEnter={() => setActive(0)}
+            >
+              <button
+                type="button"
+                className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
+                onFocus={() => setActive(0)}
+                onClick={enterRetro}
+              >
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-[9px] bg-[#efead8] text-[#23221e] shadow-[inset_0_0_0_1.5px_#23221e]">
+                  <HappyMac className="size-5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-medium">Classic Mac</span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    Switch MacKit to the 1984 look
+                  </span>
+                </span>
+              </button>
+            </li>
+          ) : null}
+          {rowCount === 0 ? (
             <li className="px-3 py-6 text-center text-sm text-muted-foreground">
               No apps match “{query.trim()}”.
             </li>
@@ -111,11 +170,11 @@ export function SearchBox({
                 <li
                   key={hit.pkg.id}
                   role="option"
-                  aria-selected={index === activeIndex}
-                  className={`flex items-center rounded-xl ${
-                    index === activeIndex ? "bg-muted" : "hover:bg-muted/70"
+                  aria-selected={index + offset === activeIndex}
+                  className={`flex items-center rounded-[10px] ${
+                    index + offset === activeIndex ? "bg-muted" : ""
                   }`}
-                  onMouseEnter={() => setActive(index)}
+                  onMouseEnter={() => setActive(index + offset)}
                 >
                   <PackageTooltip pkg={hit.pkg}>
                     <button
@@ -127,7 +186,7 @@ export function SearchBox({
                           : `Add ${hit.pkg.name}`
                       }
                       className="flex min-w-0 flex-1 items-center gap-3 px-2.5 py-2 text-left"
-                      onFocus={() => setActive(index)}
+                      onFocus={() => setActive(index + offset)}
                       onClick={() => onToggle(hit.pkg)}
                     >
                       <PackageIcon
@@ -143,7 +202,13 @@ export function SearchBox({
                           {hit.pkg.desc || hit.pkg.token}
                         </span>
                       </span>
-                      <span className="text-xs text-muted-foreground">
+                      <span
+                        className={
+                          selected
+                            ? "rounded-md bg-primary px-1.5 py-0.5 text-[11px] font-semibold text-primary-foreground"
+                            : "text-xs text-muted-foreground"
+                        }
+                      >
                         {selected ? "Added" : kindLabel(hit.pkg.kind)}
                       </span>
                     </button>

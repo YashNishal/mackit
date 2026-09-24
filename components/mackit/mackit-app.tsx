@@ -3,11 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { BundleSection } from "@/components/mackit/bundle-section";
-import { CartContents, MobileCartBar } from "@/components/mackit/cart-panel";
 import { CategorySection } from "@/components/mackit/category-section";
 import { CheckoutDialog } from "@/components/mackit/checkout-dialog";
+import { Dock } from "@/components/mackit/dock";
 import { PackageDetailsDialog } from "@/components/mackit/package-details-dialog";
-import { ForMacEgg } from "@/components/for-mac-egg";
 import { SearchBox } from "@/components/mackit/search-box";
 import { SiteFooter } from "@/components/mackit/site-footer";
 import { SiteHeader } from "@/components/mackit/site-header";
@@ -45,7 +44,6 @@ export function MacKitApp({
   const [ids, setIds] = useState<PackageId[]>([]);
   const [unavailable, setUnavailable] = useState<PackageId[]>([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [mobileCartOpen, setMobileCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [detailsPkg, setDetailsPkg] = useState<CatalogPackage | null>(null);
 
@@ -168,6 +166,23 @@ export function MacKitApp({
     });
   }, []);
 
+  const clear = useCallback(() => {
+    const previous = ids;
+    setIds([]);
+    toast(
+      previous.length === 1 ? "Removed 1 app." : `Removed ${previous.length} apps.`,
+      {
+        action: {
+          label: "Undo",
+          onClick: () =>
+            setIds((current) =>
+              uniqueSortedIds([...current, ...previous]).slice(0, MAX_CART_SIZE),
+            ),
+        },
+      },
+    );
+  }, [ids]);
+
   const share = useCallback(async () => {
     const path = cartSharePath(ids);
     const url = `${window.location.origin}${path}`;
@@ -205,32 +220,30 @@ export function MacKitApp({
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-6xl flex-1 gap-8 px-4 pt-10 pb-28 sm:px-6 lg:pb-16">
-        <div className="min-w-0 flex-1 space-y-12">
-          <section className="max-w-3xl space-y-5">
-            <ForMacEgg />
-            <h1 className="font-display text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-              Set up your Mac in one go.
-            </h1>
-            <p className="max-w-xl text-base leading-7 text-muted-foreground">
-              Browse popular apps or search for more. Add them to a cart, then
-              install everything with one Terminal command. No account.
-            </p>
-            <p className="font-mono text-[11px] tracking-wide text-muted-foreground">
-              Nothing is uploaded · Share your list with a link
-            </p>
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-8 sm:px-6">
+        <section className="pt-10 pb-10 sm:pt-16 sm:pb-12">
+          <h1 className="font-display max-w-[14ch] text-[2.625rem] leading-[1.02] font-bold tracking-[-0.035em] text-balance sm:text-[4.5rem]">
+            Set up your Mac in one go.
+          </h1>
+          <p className="mt-5 max-w-[54ch] text-[17px] leading-7 text-pretty text-muted-foreground">
+            Pick the apps you want and they collect in the Dock below. Paste
+            one command into Terminal and they all install at once. No
+            account needed.
+          </p>
+          <div className="mt-8 max-w-2xl space-y-3">
             {catalogError ? (
-              <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+              <p className="rounded-[12px] border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 {catalogError}
               </p>
             ) : null}
             {unavailable.length > 0 ? (
-              <p className="rounded-lg border bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
-                Some shared apps are no longer available: {unavailable.join(", ")}.
+              <p className="rounded-[12px] border bg-card px-3 py-2 text-sm text-muted-foreground">
+                Some apps in this link are no longer available and were left
+                out: {unavailable.join(", ")}.
               </p>
             ) : null}
             {packages.length === 0 && !catalogError ? (
-              <Skeleton className="h-14 w-full rounded-xl" />
+              <Skeleton className="h-13 w-full rounded-[14px]" />
             ) : (
               <SearchBox
                 packages={packages}
@@ -240,56 +253,35 @@ export function MacKitApp({
                 disabled={Boolean(catalogError)}
               />
             )}
-          </section>
+          </div>
+        </section>
 
-          {featured.map((category) => (
-            <CategorySection
-              key={category.id}
-              category={category}
-              selectedIds={selectedIds}
-              onToggle={toggle}
-              onDetails={showDetails}
-            />
-          ))}
+        <BundleSection
+          bundles={bundles}
+          selectedIds={selectedIds}
+          onAddBundle={addBundle}
+          onToggle={toggle}
+          onDetails={showDetails}
+        />
 
-          <BundleSection
-            bundles={bundles}
+        {featured.map((category) => (
+          <CategorySection
+            key={category.id}
+            category={category}
             selectedIds={selectedIds}
-            onAddBundle={addBundle}
             onToggle={toggle}
             onDetails={showDetails}
           />
-        </div>
-
-        <aside className="hidden w-80 shrink-0 lg:block">
-          <div className="sticky top-20 rounded-2xl border bg-card/90 p-4 shadow-lg">
-            <CartContents
-              items={items}
-              onRemove={toggle}
-              onClear={() => setIds([])}
-              onInstall={() => setCheckoutOpen(true)}
-              onShare={() => void share()}
-            />
-          </div>
-        </aside>
+        ))}
       </main>
 
-      <MobileCartBar
-        count={items.length}
-        open={mobileCartOpen}
-        onOpenChange={setMobileCartOpen}
-      >
-        <CartContents
-          items={items}
-          onRemove={toggle}
-          onClear={() => setIds([])}
-          onInstall={() => {
-            setMobileCartOpen(false);
-            setCheckoutOpen(true);
-          }}
-          onShare={() => void share()}
-        />
-      </MobileCartBar>
+      <Dock
+        items={items}
+        onRemove={toggle}
+        onClear={clear}
+        onInstall={() => setCheckoutOpen(true)}
+        onShare={() => void share()}
+      />
 
       <CheckoutDialog
         open={checkoutOpen}
@@ -308,7 +300,7 @@ export function MacKitApp({
           }
         }}
       />
-      <SiteFooter generatedAt={generatedAt} />
+      <SiteFooter generatedAt={generatedAt} className="pb-32" />
     </div>
   );
 }

@@ -16,20 +16,20 @@ export function RetroHowItWorks() {
           <div className="mt-4 space-y-4 text-[13px] leading-6">
             <p>
               MacKit is a shopping list for macOS. You pick apps in
-              the browser. Installation happens on your Mac through Homebrew.
+              the browser, and one command installs all of them.
             </p>
             <ol className="list-decimal space-y-3 border-2 border-foreground p-4 pl-8">
               <li>
-                Search any Homebrew app or browse curated categories, then add
+                Search thousands of apps or browse curated categories, then add
                 items to a cart stored only in this browser.
               </li>
               <li>
                 Copy one command. It downloads MacKit&apos;s installer, checks a
-                checksum, and installs only the selected Homebrew tokens.
+                checksum, and installs only the apps you picked.
               </li>
               <li>
-                Paste it in Terminal. If Homebrew is missing, the script explains
-                what will happen and asks before installing it.
+                Paste it in Terminal. If your Mac needs a helper tool first, the
+                installer explains what it is and asks before adding it.
               </li>
             </ol>
             <p>

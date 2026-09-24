@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  AppWindowMac,
   Archive,
   ArrowDownToLine,
   AudioWaveform,
@@ -68,7 +69,6 @@ import {
   SiGithub,
   SiGooglechrome,
   SiGoogledrive,
-  SiHomebrew,
   SiInkscape,
   SiIterm2,
   SiKeepassxc,
@@ -286,7 +286,7 @@ const BRAND_COLOR: Record<string, string> = {
 export function iconForPackage(pkg: CatalogPackage): PackageGlyph {
   return (
     ICONS_BY_TOKEN[pkg.token] ??
-    (pkg.kind === "formula" ? Terminal : SiHomebrew)
+    (pkg.kind === "formula" ? Terminal : AppWindowMac)
   );
 }
 

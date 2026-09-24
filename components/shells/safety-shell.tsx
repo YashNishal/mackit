@@ -19,49 +19,61 @@ const RetroSafetyLoader = dynamic(
   },
 );
 
+const GUARANTEES = [
+  {
+    title: "Your list stays with you",
+    body: "The apps you pick never leave this browser. There are no accounts and no analytics.",
+  },
+  {
+    title: "The installer is checked",
+    body: "The command downloads a versioned installer and verifies its SHA-256 checksum before running it.",
+  },
+  {
+    title: "Only app names go in",
+    body: "The installer accepts a list of known app IDs and nothing else. It rejects flags, file paths, and extra commands.",
+  },
+  {
+    title: "No sudo",
+    body: "MacKit never runs commands as administrator. Your Mac may ask for your password while some apps install.",
+  },
+  {
+    title: "You see it all first",
+    body: "Checkout shows the installer’s source, its checksum, and every app before you copy anything.",
+  },
+] as const;
+
 function ModernSafety() {
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
-      <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-16 sm:px-6">
-        <p className="text-sm font-medium text-primary">Safety</p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-12 pb-20 sm:px-6 sm:pt-16">
+        <h1 className="font-display max-w-[16ch] text-[2.5rem] leading-[1.05] font-bold tracking-[-0.03em] text-balance sm:text-6xl">
           Inspect before you paste.
         </h1>
-        <div className="mt-8 space-y-6 text-base leading-7 text-muted-foreground">
-          <p>
-            Installing software always requires trust. MacKit is designed so you
-            can see exactly what will run.
-          </p>
-          <ul className="list-disc space-y-3 pl-5">
-            <li>The cart never leaves your browser. There are no accounts or analytics.</li>
-            <li>
-              The copied command downloads a versioned runner and verifies its
-              SHA-256 digest before executing it.
-            </li>
-            <li>
-              The runner accepts only a typed list of Homebrew tokens. It rejects
-              flags, paths, and extra commands.
-            </li>
-            <li>
-              Homebrew itself may ask for your Mac password. MacKit does not use
-              sudo.
-            </li>
-            <li>
-              Checkout shows the runner source, checksum, and package list before
-              you copy anything.
-            </li>
-          </ul>
-          <p>
-            You still need to trust this website and Homebrew. Read the generated
-            command. If anything looks unexpected, do not run it.
-          </p>
-          <p>
-            <Link href="/" className="text-foreground underline underline-offset-4">
-              Back to the catalog
-            </Link>
-          </p>
-        </div>
+        <p className="mt-5 max-w-[58ch] text-[17px] leading-7 text-pretty text-muted-foreground">
+          Installing software always takes some trust. MacKit is built so you
+          can see exactly what will run before you run it.
+        </p>
+        <dl className="mt-12 grid max-w-3xl divide-y border-y">
+          {GUARANTEES.map((item) => (
+            <div key={item.title} className="grid gap-1 py-5 sm:grid-cols-[14rem_1fr] sm:gap-6">
+              <dt className="font-semibold">{item.title}</dt>
+              <dd className="max-w-[60ch] leading-7 text-muted-foreground">{item.body}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-8 max-w-[60ch] leading-7 text-muted-foreground">
+          Apps are installed with Homebrew, the open-source package manager
+          for macOS, so you’re trusting this website and Homebrew. Read the
+          command before you run it. If anything looks unexpected, don’t run
+          it.
+        </p>
+        <Link
+          href="/"
+          className="mt-6 inline-flex h-10 items-center rounded-[10px] bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary/85"
+        >
+          Browse apps
+        </Link>
       </main>
       <SiteFooter />
     </div>
