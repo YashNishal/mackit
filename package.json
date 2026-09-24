@@ -4,15 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "bun scripts/hash-installer.ts && bun scripts/build-catalog.ts && next build",
+    "build": "bun scripts/hash-installer.ts && next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "catalog": "bun scripts/build-catalog.ts",
+    "catalog:publish": "bun scripts/publish-catalog.ts",
     "hash-installer": "bun scripts/hash-installer.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "@vercel/blob": "^2.8.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.2.5",
     "lucide-react": "^1.41.0",

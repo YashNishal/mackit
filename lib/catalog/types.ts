@@ -45,6 +45,8 @@ export interface CatalogMeta {
   formulaCount: number;
   caskCount: number;
   packageCount: number;
+  /** Content-hashed, immutable file holding the full catalog. */
+  packagesFile: string;
   source: {
     formula: string;
     cask: string;

@@ -23,6 +23,7 @@ export interface CatalogShellProps {
   featured: ResolvedCategory[];
   bundles: ResolvedBundle[];
   generatedAt: string;
+  catalogUrl: string;
   installer: InstallerMeta;
   runnerSource: string;
 }

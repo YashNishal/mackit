@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
+const catalogOrigin = process.env.NEXT_PUBLIC_CATALOG_BASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_CATALOG_BASE_URL).origin
+  : "";
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -14,7 +17,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data:",
       "font-src 'self'",
-      "connect-src 'self'",
+      `connect-src 'self'${catalogOrigin ? ` ${catalogOrigin}` : ""}`,
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

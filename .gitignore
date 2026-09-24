@@ -20,6 +20,9 @@
 # production
 /build
 
+# generated catalog (published to Vercel Blob; `bun run catalog` for local dev)
+/public/catalog/
+
 # misc
 .DS_Store
 *.pem

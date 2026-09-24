@@ -22,7 +22,6 @@ import {
   uniqueSortedIds,
 } from "@/lib/cart/codec";
 import { fromCompactCatalog } from "@/lib/catalog/compact";
-import { catalogUrl } from "@/lib/catalog/paths";
 import type { CatalogPackage, CompactCatalog, PackageId } from "@/lib/catalog/types";
 import { MAX_CART_SIZE } from "@/lib/catalog/types";
 import type { InstallerMeta } from "@/lib/installer/command";
@@ -31,12 +30,14 @@ export function MacKitApp({
   featured,
   bundles,
   generatedAt,
+  catalogUrl,
   installer,
   runnerSource,
 }: {
   featured: ResolvedCategory[];
   bundles: ResolvedBundle[];
   generatedAt: string;
+  catalogUrl: string;
   installer: InstallerMeta;
   runnerSource: string;
 }) {
@@ -62,7 +63,7 @@ export function MacKitApp({
     let cancelled = false;
     async function load() {
       try {
-        const response = await fetch(catalogUrl());
+        const response = await fetch(catalogUrl);
         if (!response.ok) {
           throw new Error("Catalog request failed.");
         }
@@ -104,7 +105,7 @@ export function MacKitApp({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [catalogUrl]);
 
   useEffect(() => {
     if (!hydrated) {

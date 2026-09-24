@@ -4,15 +4,19 @@ import { CatalogShell } from "@/components/shells/catalog-shell";
 import { resolveBundles, resolveCategories } from "@/data/categories";
 import { indexById } from "@/lib/catalog/compact";
 import {
-  loadCatalogFromDisk,
-  loadCatalogMetaFromDisk,
+  loadCatalogMeta,
+  loadFeaturedCatalog,
   loadInstallerMetaFromDisk,
 } from "@/lib/catalog/load";
+import { catalogUrl } from "@/lib/catalog/paths";
+
+// Safety net only: the weekly cron revalidates the "catalog" tag on publish.
+export const revalidate = 86400;
 
 export default async function HomePage() {
   const [catalog, meta, installer] = await Promise.all([
-    loadCatalogFromDisk(),
-    loadCatalogMetaFromDisk(),
+    loadFeaturedCatalog(),
+    loadCatalogMeta(),
     loadInstallerMetaFromDisk(),
   ]);
   const featured = resolveCategories(indexById(catalog.packages));
@@ -27,6 +31,7 @@ export default async function HomePage() {
       featured={featured}
       bundles={bundles}
       generatedAt={meta.generatedAt}
+      catalogUrl={catalogUrl(meta.packagesFile)}
       installer={installer}
       runnerSource={runnerSource}
     />
