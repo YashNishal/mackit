@@ -6,6 +6,7 @@ import { BundleSection } from "@/components/mackit/bundle-section";
 import { CategorySection } from "@/components/mackit/category-section";
 import { CheckoutDialog } from "@/components/mackit/checkout-dialog";
 import { Dock } from "@/components/mackit/dock";
+import { HeroDemo } from "@/components/mackit/hero-demo";
 import { PackageDetailsDialog } from "@/components/mackit/package-details-dialog";
 import { SearchBox } from "@/components/mackit/search-box";
 import { SiteFooter } from "@/components/mackit/site-footer";
@@ -221,38 +222,43 @@ export function MacKitApp({
     <div className="flex min-h-dvh flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-8 sm:px-6">
-        <section className="pt-10 pb-10 sm:pt-16 sm:pb-12">
-          <h1 className="font-display max-w-[14ch] text-[2.625rem] leading-[1.02] font-bold tracking-[-0.035em] text-balance sm:text-[4.5rem]">
-            Set up your Mac in one go.
-          </h1>
-          <p className="mt-5 max-w-[54ch] text-[17px] leading-7 text-pretty text-muted-foreground">
-            Pick the apps you want and they collect in the Dock below. Paste
-            one command into Terminal and they all install at once. No
-            account needed.
-          </p>
-          <div className="mt-8 max-w-2xl space-y-3">
-            {catalogError ? (
-              <p className="rounded-[12px] border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {catalogError}
-              </p>
-            ) : null}
-            {unavailable.length > 0 ? (
-              <p className="rounded-[12px] border bg-card px-3 py-2 text-sm text-muted-foreground">
-                Some apps in this link are no longer available and were left
-                out: {unavailable.join(", ")}.
-              </p>
-            ) : null}
-            {packages.length === 0 && !catalogError ? (
-              <Skeleton className="h-13 w-full rounded-[14px]" />
-            ) : (
-              <SearchBox
-                packages={packages}
-                selectedIds={selectedIds}
-                onToggle={toggle}
-                onDetails={showDetails}
-                disabled={Boolean(catalogError)}
-              />
-            )}
+        <section className="flex items-center justify-between gap-12 pt-10 pb-10 sm:pt-16 sm:pb-12">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display max-w-[14ch] text-[2.625rem] leading-[1.02] font-bold tracking-[-0.035em] text-balance sm:text-[4.5rem]">
+              Set up your Mac in one go.
+            </h1>
+            <p className="mt-5 max-w-[54ch] text-[17px] leading-7 text-pretty text-muted-foreground">
+              Pick the apps you want and they collect in the Dock below. Paste
+              one command into Terminal and they all install at once. No
+              account needed.
+            </p>
+            <div className="mt-8 max-w-2xl space-y-3">
+              {catalogError ? (
+                <p className="rounded-[12px] border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                  {catalogError}
+                </p>
+              ) : null}
+              {unavailable.length > 0 ? (
+                <p className="rounded-[12px] border bg-card px-3 py-2 text-sm text-muted-foreground">
+                  Some apps in this link are no longer available and were left
+                  out: {unavailable.join(", ")}.
+                </p>
+              ) : null}
+              {packages.length === 0 && !catalogError ? (
+                <Skeleton className="h-13 w-full rounded-[14px]" />
+              ) : (
+                <SearchBox
+                  packages={packages}
+                  selectedIds={selectedIds}
+                  onToggle={toggle}
+                  onDetails={showDetails}
+                  disabled={Boolean(catalogError)}
+                />
+              )}
+            </div>
+          </div>
+          <div className="hidden lg:block">
+            <HeroDemo featured={featured} />
           </div>
         </section>
 
