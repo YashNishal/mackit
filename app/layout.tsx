@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { AppProviders } from "@/components/mackit/app-providers";
 import { InlineScript } from "@/components/mackit/inline-script";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
 import { UI_MODE_BOOTSTRAP_SCRIPT } from "@/lib/ui-mode";
 import "./globals.css";
@@ -18,16 +19,45 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: SITE_URL,
   title: {
-    default: "MacKit — Set up your Mac in one go",
+    default: "MacKit: Set up your Mac in one go",
     template: "%s · MacKit",
   },
-  description:
-    "Choose apps for your Mac, add them to a cart, and install everything with one command.",
-  applicationName: "MacKit",
-  icons: {
-    icon: "/favicon.svg",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "Mac setup",
+    "new Mac",
+    "install Mac apps",
+    "macOS apps",
+    "Homebrew",
+    "Homebrew casks",
+    "brew install",
+    "Mac app installer",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    url: "/",
+    title: "MacKit: Set up your Mac in one go",
+    description: SITE_DESCRIPTION,
+    locale: "en_US",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "MacKit: Set up your Mac in one go",
+    description: SITE_DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3f3f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#1d1d20" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
