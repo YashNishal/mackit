@@ -1,8 +1,10 @@
+import Image from "next/image";
 import { createElement } from "react";
 import { cn } from "@/lib/utils";
 import {
   iconColorForPackage,
   iconForPackage,
+  logoForPackage,
 } from "@/lib/catalog/icons";
 import type { CatalogPackage } from "@/lib/catalog/types";
 
@@ -21,7 +23,7 @@ export function PackageIcon({
   size?: keyof typeof SIZES;
   selected?: boolean;
 }) {
-  const color = iconColorForPackage(pkg);
+  const logo = logoForPackage(pkg);
   const dims = SIZES[size];
 
   return (
@@ -33,7 +35,21 @@ export function PackageIcon({
         dims.wrap,
       )}
     >
-      {createElement(iconForPackage(pkg), { size: dims.icon, color })}
+      {logo ? (
+        <Image
+          src={logo}
+          alt=""
+          width={dims.icon}
+          height={dims.icon}
+          draggable={false}
+          className="object-contain"
+        />
+      ) : (
+        createElement(iconForPackage(pkg), {
+          size: dims.icon,
+          color: iconColorForPackage(pkg),
+        })
+      )}
     </span>
   );
 }
