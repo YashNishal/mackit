@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AppProviders } from "@/components/mackit/app-providers";
 import { InlineScript } from "@/components/mackit/inline-script";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
+        <SpeedInsights />
       </body>
     </html>
   );
